@@ -6,12 +6,8 @@ Termux-এ প্রাথমিক সেটআপ
 Termux খুলে নিচের কমান্ডগুলো চালাও:
 pkg update && pkg upgrade
 pkg install python git termux-api
-
-
 এরপর GPS কমান্ডটি পরীক্ষা করো:
 termux-location
-
-
 প্রথমবার Android-এ লোকেশন পারমিশন চাইতে পারে। অনুমতি দেওয়ার পরও যদি কাজ না করে, ফোনের Location চালু আছে কি না এবং Termux:API companion app ইনস্টল আছে কি না পরীক্ষা করো।
 ৩. সিস্টেমটি কী কী করতে পারবে?
 ফিচার	কাজ
