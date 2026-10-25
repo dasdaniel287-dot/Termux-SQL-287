@@ -1,0 +1,29 @@
+{
+  "scanner": {
+    "name": "SQLGuard AI",
+    "version": "2026.1.0",
+    "mode_default": "passive",
+    "timeout_seconds": 6.0,
+    "max_retries": 2,
+    "max_requests_per_endpoint": 15,
+    "rate_limit_delay_seconds": 0.35,
+    "concurrency_limit": 1,
+    "user_agent": "SQLGuard-Defensive-Scanner/2026.1 (Authorized-Audit; Termux-Android; +https://github.com/security/sqlguard-ai)",
+    "stop_on_repeated_errors": 4
+  },
+  "safety_guardrails": {
+    "require_explicit_authorization": true,
+    "disallow_arbitrary_public_scanning": true,
+    "allow_local_lab_targets": true,
+    "block_private_networks_in_external_mode": true,
+    "prevent_ssrf_redirects": true,
+    "max_redirects": 3,
+    "redact_sensitive_headers": ["Authorization", "Cookie", "Set-Cookie", "X-Api-Key", "Token"],
+    "redact_sensitive_params": ["password", "token", "auth", "secret", "session", "api_key", "pin", "ssn"]
+  },
+  "reporting": {
+    "output_directory": "./reports",
+    "default_formats": ["txt", "json", "html"],
+    "include_remediation_diff": true
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "SQLGuard AI — Termux SQL Injection Scanner",
+  "description": "Advanced defensive SQL injection assessment and training platform for Android Termux with safe testing, vulnerability analyzer, SQLite lab, and multi-format reporting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

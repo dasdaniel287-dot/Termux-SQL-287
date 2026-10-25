@@ -1,0 +1,73 @@
+==============================================================================
+SQLGUARD AI — DEFENSIVE SQL INJECTION ASSESSMENT REPORT
+==============================================================================
+Generated:        2026-10-25 11:45:00 UTC
+Assessment Scope: http://127.0.0.1:8000/api/vulnerable_search?q=Termux
+Mode:             SAFE-ACTIVE
+Duration:         1.48s
+Total Findings:   2
+------------------------------------------------------------------------------
+SEVERITY BREAKDOWN:
+  [!] Critical:      0
+  [*] High:          1
+  [+] Medium:        0
+  [-] Low:           1
+  [i] Informational: 0
+==============================================================================
+
+1. EXECUTIVE SUMMARY
+------------------------------------------------------------------------------
+SQLGuard AI performed an authorized, non-destructive security evaluation
+to assess SQL injection exposure. Testing prioritized safe boundary parsing
+and database error analysis without data tampering or exfiltration.
+
+2. DETAILED FINDINGS & EVIDENCE
+------------------------------------------------------------------------------
+Finding #1: [HIGH] Error-Based SQL Injection Detected in 'q' (SQLite)
+  Category:    SQL Injection (Error-Based / Syntax Leakage)
+  Confidence:  Confirmed
+  Endpoint:    http://127.0.0.1:8000/api/vulnerable_search?q=Termux
+  Parameter:   q
+  Description: Submitting a harmless delimiter probe on parameter 'q' resulted
+               in an unhandled SQLite database syntax error leaked directly
+               in the HTTP response.
+  Evidence:    DBMS Detected: SQLite | Error snippet: "sqlite3.OperationalError: near \"'\": syntax error" | Confirmatory probe: doubling quote delimiter successfully restored valid SQL syntax.
+  Remediation: Implement parameterized queries (prepared statements) using
+               parameter placeholders (e.g. ?). Disable verbose server error
+               messages and database stack traces in production.
+  Secure Code Example:
+    cursor.execute('SELECT id, name, category, in_stock FROM training_products WHERE name = ?', (user_input,))
+  Verification Steps:
+    1. Replace query concatenation with parameter binding.
+    2. Re-run SQLGuard scanner: ensure HTTP 200 is returned with zero SQL exceptions.
+    3. Verify unit tests with special characters (' " \ ;).
+------------------------------------------------------------------------------
+Finding #2: [LOW] Database Query Surface Identified: 'q'
+  Category:    Attack Surface Discovery
+  Confidence:  Confirmed
+  Endpoint:    http://127.0.0.1:8000/api/vulnerable_search?q=Termux
+  Parameter:   q
+  Description: The parameter 'q' appears to pass dynamic filtering or search terms
+               to backend storage.
+  Evidence:    Observed query parameter: q=Termux
+  Remediation: Ensure this parameter is handled using parameterized SQL queries.
+  Secure Code Example:
+    cursor.execute('SELECT * FROM items WHERE name = ?', (query_param,))
+  Verification Steps:
+    Ensure unit tests confirm SQL syntax errors cannot be induced through this parameter.
+------------------------------------------------------------------------------
+
+3. ASSESSMENT LIMITATIONS
+------------------------------------------------------------------------------
+- Testing was strictly harmless and non-destructive; no payloads or exfiltration attempted.
+- Only specified parameters and endpoints were reviewed.
+- Out-of-band and blind asynchronous database interactions were not in scope.
+
+4. FINAL DEFENSIVE SECURITY CHECKLIST
+------------------------------------------------------------------------------
+[ ] 1. Parameterize all SQL queries using prepared statement placeholders.
+[ ] 2. Audit backend database connection accounts for least privilege.
+[ ] 3. Suppress all database error details in production HTTP responses.
+[ ] 4. Add automated unit and integration regression tests for special characters.
+==============================================================================
+End of SQLGuard AI Assessment Report.
